@@ -2,6 +2,9 @@
 *.pdf
 *.png
 src/
+sources/
+out/
+img/
 chrome-*/
 tmp*.html
 unit*.html
