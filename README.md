@@ -17,6 +17,7 @@ See [`sample.pdf`](sample.pdf) for the built demo: cover, content pages and the 
 | `preview.sh` | Renders every page as a PNG plus a contact sheet for visual QA |
 | `sample.html` | Minimal skeleton showing every component. Copy it to start a unit |
 | `LEARNINGS.md` | Full playbook: workflow, design decisions, component reference, pitfalls and fixes, and a brief for an AI agent per unit |
+| `AGENTS.md` / `CLAUDE.md` | Instructions picked up automatically by Codex / Claude Code (see below) |
 
 ## Requirements
 
@@ -51,7 +52,48 @@ python3 build.py sample.html sample.pdf      # rebuilds the demo guide
 4. Contents page numbers fill in automatically from `<span class="pg" data-sec="sN"></span>`.
 5. Build, preview, fix, repeat.
 
-The guides work well as an AI-assisted workflow: give an LLM agent the extracted slides plus the brief in `LEARNINGS.md` §7, one agent per unit. The core rule is **facts only from the source**. Anything missing or unreadable gets marked `SOURCE UNCLEAR` instead of being filled in from general knowledge.
+## Using it with Claude Code or Codex
+
+The repo is set up for coding agents. `AGENTS.md` holds the agent instructions: workflow, hard rules and the QA checklist. Codex reads `AGENTS.md` automatically. Claude Code reads `CLAUDE.md`, which simply imports `AGENTS.md`. Neither tool needs any extra setup.
+
+**1. Set up a folder per subject:**
+
+```bash
+git clone https://github.com/soham901/exam-revision-guide-kit my-subject-guides
+cd my-subject-guides
+mkdir sources && cp ~/Downloads/unit*.pdf ~/Downloads/question-bank.pdf sources/
+```
+
+`.gitignore` already keeps PDFs, extracted text and `unit*.html` out of git, so your course material won't be committed by accident.
+
+**2. Start the agent in that folder:**
+
+```bash
+claude      # Claude Code
+codex       # OpenAI Codex CLI
+```
+
+**3. Give it a prompt like this:**
+
+```text
+Build exam revision guides following AGENTS.md.
+Subject: Computer Networks. Units: all PDFs in sources/unit*.pdf (one guide per unit).
+A4 portrait, as long as needed. Use sources/question-bank.pdf only for QB/PYQ badges.
+Output PDFs to out/. Check every page visually before you finish.
+```
+
+The agent will:
+1. extract the slides;
+2. write `unitN.html` files;
+3. build them with `build.py`;
+4. check every page image with `preview.sh` and fix any layout problems;
+5. tell you which items it marked `SOURCE UNCLEAR`.
+
+**Tips:**
+- **Several units:** Claude Code can run one subagent per unit in parallel. Ask for it ("use one subagent per unit"). In Codex, run one session per unit, or do the units one after another.
+- **Your own detailed spec:** paste a long spec (sections, design, what to emphasise) into the prompt along with "follow AGENTS.md". `AGENTS.md` covers the defaults; your prompt overrides the details.
+- **The core rule is facts only from your sources.** If the agent fills a gap from general knowledge, tell it to mark the gap `SOURCE UNCLEAR` instead.
+- **Restyling:** to change the colours or fonts for every unit, ask the agent to edit `guide.css` once, before any units are built. Don't let it restyle units one by one.
 
 ## Design rules
 
