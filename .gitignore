@@ -1,0 +1,9 @@
+# build outputs & local course material
+*.pdf
+*.png
+src/
+chrome-*/
+tmp*.html
+unit*.html
+__pycache__/
+!docs/*.png
