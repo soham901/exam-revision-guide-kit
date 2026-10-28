@@ -6,6 +6,8 @@ It's built with plain HTML + CSS and printed to PDF by headless Chrome. The text
 
 ![Sample content page](docs/sample-page.png)
 
+See [`sample.pdf`](sample.pdf) for the built demo: cover, content pages and the 30-Second Revision page.
+
 ## What's inside
 
 | File | Purpose |
@@ -34,7 +36,7 @@ export CHROME=chromium                                                          
 
 ```bash
 git clone https://github.com/soham901/exam-revision-guide-kit && cd exam-revision-guide-kit
-python3 build.py sample.html sample.pdf      # builds the demo guide
+python3 build.py sample.html sample.pdf      # rebuilds the demo guide
 ./preview.sh sample.pdf                      # sample-p-*.png + sample-sheet.png
 ```
 

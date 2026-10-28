@@ -7,3 +7,4 @@ tmp*.html
 unit*.html
 __pycache__/
 !docs/*.png
+!sample.pdf
